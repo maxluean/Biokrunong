@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protista Kingdom: The Microscopic World</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: #f0fdfa; /* Teal-50 */
+            overflow: hidden;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Prompt', sans-serif;
+        }
+
+        /* Animated Background Microbes */
+        .microbe-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .microbe {
+            position: absolute;
+            background: rgba(45, 212, 191, 0.1); /* Teal tint */
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: float 20s infinite ease-in-out;
+        }
+        .microbe:nth-child(1) { width: 100px; height: 100px; top: 10%; left: 10%; animation-duration: 25s; }
+        .microbe:nth-child(2) { width: 150px; height: 150px; top: 60%; left: 80%; animation-duration: 30s; background: rgba(59, 130, 246, 0.1); }
+        .microbe:nth-child(3) { width: 80px; height: 80px; top: 40%; left: 40%; animation-duration: 20s; animation-delay: -5s; }
+        .microbe:nth-child(4) { width: 200px; height: 200px; bottom: -50px; left: 20%; animation-duration: 35s; background: rgba(168, 85, 247, 0.05); }
+        .microbe:nth-child(5) { width: 60px; height: 60px; top: 20%; right: 20%; animation-duration: 18s; border: 2px solid rgba(45, 212, 191, 0.2); background: transparent; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -50px) rotate(10deg); }
+            66% { transform: translate(-20px, 20px) rotate(-5deg); }
+        }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+        .glass-sidebar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border-right: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Typography & Content */
+        .prose-custom h3 {
+            color: #0f766e;
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px dashed #99f6e4;
+            display: inline-block;
+        }
+        .prose-custom p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: #334155;
+        }
+        .prose-custom li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .prose-custom li::before {
+            content: "•";
+            color: #0d9488;
+            font-weight: bold;
+            font-size: 1.5em;
+            position: absolute;
+            left: 0;
+            top: -5px;
+        }
+
+        /* Cards */
+        .bio-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+        .bio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #5eead4;
+        }
+
+        /* Navigation */
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #0f766e;
+            transform: scaleY(0);
+            transition: transform 0.2s;
+        }
+        .nav-item.active-nav::before {
+            transform: scaleY(1);
+        }
+        .nav-item.active-nav {
+            background: linear-gradient(90deg, #f0fdfa 0%, rgba(255,255,255,0) 100%);
+            color: #0f766e;
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-content {
+            animation: fadeSlideUp 0.5s ease-out forwards;
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+        .accordion-content {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .accordion-content.expanded {
+            max-height: 1000px; /* Arbitrary large value */
+            opacity: 1;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="flex flex-col h-screen">
+
+    <!-- Background Animation -->
+    <div class="microbe-bg">
+        <div class="microbe"></div>
+        <div class="microbe"></div>
+        <div class="microbe"></div>
+        <div class="microbe"></div>
+        <div class="microbe"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-teal-800 text-white shadow-lg shrink-0 z-30 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center relative">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
+                    <i class="fas fa-dna text-xl animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Protista Kingdom</h1>
+                    <p class="text-xs text-teal-200 font-light tracking-widest uppercase">Biology Learning Hub</p>
+                </div>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-white p-2 rounded hover:bg-white/10 transition">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden relative z-20">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="glass-sidebar w-72 flex-shrink-0 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300 absolute md:relative h-full shadow-2xl md:shadow-none z-40">
+            <div class="p-6">
+                <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Navigation</div>
+                <nav class="space-y-1">
+                    <a href="#" onclick="loadContent('intro')" id="nav-intro" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition active-nav">
+                        <i class="fas fa-globe-americas w-6 text-center mr-3"></i> 
+                        <span>ภาพรวม (Overview)</span>
+                    </a>
+                    
+                    <div class="pt-4 pb-2">
+                        <span class="text-xs font-bold text-teal-600/70 uppercase tracking-widest pl-4">Classification</span>
+                    </div>
+                    
+                    <a href="#" onclick="loadContent('protozoa')" id="nav-protozoa" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition">
+                        <i class="fas fa-bacteria w-6 text-center mr-3 text-blue-500"></i>
+                        <span>Protozoa (สัตว์)</span>
+                    </a>
+                    <a href="#" onclick="loadContent('algae')" id="nav-algae" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition">
+                        <i class="fas fa-leaf w-6 text-center mr-3 text-green-500"></i>
+                        <span>Algae (สาหร่าย)</span>
+                    </a>
+                    <a href="#" onclick="loadContent('fungilike')" id="nav-fungilike" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition">
+                        <i class="fas fa-fungi w-6 text-center mr-3 text-yellow-500"></i>
+                        <span>Fungi-like (รา)</span>
+                    </a>
+
+                    <div class="pt-4 pb-2">
+                        <span class="text-xs font-bold text-teal-600/70 uppercase tracking-widest pl-4">Activities</span>
+                    </div>
+
+                    <a href="#" onclick="loadContent('videos')" id="nav-videos" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition">
+                        <i class="fas fa-play-circle w-6 text-center mr-3 text-red-500"></i>
+                        <span>Video Lab</span>
+                    </a>
+                    <a href="#" onclick="loadContent('quiz')" id="nav-quiz" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition">
+                        <i class="fas fa-clipboard-list w-6 text-center mr-3 text-purple-500"></i>
+                        <span>Quiz Challenge</span>
+                    </a>
+                </nav>
+            </div>
+            <div class="mt-auto p-4 bg-teal-50/50 border-t border-teal-100">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-teal-400 to-blue-500 flex items-center justify-center text-white text-xs font-bold shadow">
+                        B
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-gray-700">Biology M.6</p>
+                        <p class="text-xs text-gray-500">Advanced Learning</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 relative" id="main-content">
+            <!-- Content Injected Here -->
+        </main>
+    </div>
+
+    <!-- Data & Scripts -->
+    <script>
+        const contentData = {
+            intro: `
+                <div class="max-w-6xl mx-auto animate-content">
+                    <!-- Hero Section -->
+                    <div class="glass-panel rounded-2xl p-8 md:p-12 mb-8 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-teal-200 rounded-full blur-3xl opacity-50 group-hover:scale-110 transition duration-700"></div>
+                        <div class="relative z-10">
+                            <span class="bg-teal-100 text-teal-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide mb-4 inline-block">Biology Class M.6</span>
+                            <h1 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4 leading-tight">ยินดีต้อนรับสู่โลกของ<br><span class="text-teal-600">สิ่งมีชีวิตเซลล์เดียว</span></h1>
+                            <p class="text-lg text-slate-600 max-w-2xl mb-8">
+                                "อาณาจักรโพรทิสตา" คือสะพานเชื่อมแห่งวิวัฒนาการ พบกับความมหัศจรรย์ของสิ่งมีชีวิตขนาดเล็กที่เป็นต้นกำเนิดของพืช สัตว์ และเชื้อรา (มีเนื้อหาครบทั้ง 13 ไฟลัมหลัก)
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <button onclick="loadContent('protozoa')" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-full shadow-lg shadow-teal-500/30 transition transform hover:-translate-y-1 flex items-center">
+                                    <i class="fas fa-microscope mr-2"></i> เริ่มเรียนรู้
+                                </button>
+                                <button onclick="loadContent('quiz')" class="bg-white hover:bg-gray-50 text-teal-700 border border-teal-200 font-bold py-3 px-8 rounded-full transition flex items-center">
+                                    <i class="fas fa-star mr-2"></i> ทำแบบทดสอบ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Classification Grid -->
+                    <h3 class="text-2xl font-bold text-gray-700 mb-6 flex items-center"><i class="fas fa-sitemap mr-3 text-teal-500"></i>การจำแนกหมวดหมู่ (Classification)</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- Card 1 -->
+                        <div onclick="loadContent('protozoa')" class="bio-card glass-panel p-6 rounded-xl cursor-pointer bg-gradient-to-br from-white to-blue-50/50">
+                            <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 mb-4 shadow-sm">
+                                <i class="fas fa-otter text-2xl"></i>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mb-2">1. Protozoa</h4>
+                            <p class="text-sm text-gray-500 mb-3">คล้ายสัตว์ (Animal-like)</p>
+                            <p class="text-sm text-gray-600 line-clamp-2">4 ไฟลัมหลัก: เคลื่อนที่ได้ กินสิ่งอื่นเป็นอาหาร แบ่งตามอวัยวะเคลื่อนที่</p>
+                            <div class="mt-4 text-blue-500 text-sm font-semibold flex items-center">เรียนรู้ต่อ <i class="fas fa-arrow-right ml-2 text-xs"></i></div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div onclick="loadContent('algae')" class="bio-card glass-panel p-6 rounded-xl cursor-pointer bg-gradient-to-br from-white to-green-50/50">
+                            <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 mb-4 shadow-sm">
+                                <i class="fas fa-leaf text-2xl"></i>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mb-2">2. Algae</h4>
+                            <p class="text-sm text-gray-500 mb-3">คล้ายพืช (Plant-like)</p>
+                            <p class="text-sm text-gray-600 line-clamp-2">6 ไฟลัมหลัก: สังเคราะห์แสงได้ มีคลอโรพลาสต์</p>
+                            <div class="mt-4 text-green-500 text-sm font-semibold flex items-center">เรียนรู้ต่อ <i class="fas fa-arrow-right ml-2 text-xs"></i></div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div onclick="loadContent('fungilike')" class="bio-card glass-panel p-6 rounded-xl cursor-pointer bg-gradient-to-br from-white to-yellow-50/50">
+                            <div class="w-14 h-14 bg-yellow-100 rounded-2xl flex items-center justify-center text-yellow-600 mb-4 shadow-sm">
+                                <i class="fas fa-cookie-bite text-2xl"></i>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mb-2">3. Fungi-like</h4>
+                            <p class="text-sm text-gray-500 mb-3">คล้ายรา (Fungus-like)</p>
+                            <p class="text-sm text-gray-600 line-clamp-2">3 ไฟลัมหลัก: ผู้ย่อยสลาย สร้างสปอร์ได้</p>
+                            <div class="mt-4 text-yellow-600 text-sm font-semibold flex items-center">เรียนรู้ต่อ <i class="fas fa-arrow-right ml-2 text-xs"></i></div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            protozoa: `
+                <div class="max-w-5xl mx-auto animate-content">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-blue-600 text-white p-3 rounded-lg mr-4 shadow-lg">
+                            <i class="fas fa-bacteria text-2xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold text-gray-800">กลุ่ม Protozoa (โพรโทซัว)</h2>
+                            <p class="text-blue-600 font-medium">แบ่งเป็น 4 ไฟลัม ตามอวัยวะที่ใช้ในการเคลื่อนที่</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6 prose-custom">
+                        <!-- P1 Rhizopoda -->
+                        <div class="glass-panel p-6 rounded-2xl bio-card border-l-4 border-blue-500">
+                            <div class="flex justify-between items-start cursor-pointer" onclick="toggleAccordion('rhizopoda-detail')">
+                                <div>
+                                    <h3 class="!mt-0">1. Phylum Rhizopoda (อะมีบา)</h3>
+                                    <p class="text-sm text-gray-600 mb-0"><strong>Keyword:</strong> เท้าเทียม (Pseudopodium) | <strong>Ex:</strong> Amoeba, Entamoeba</p>
+                                </div>
+                                <button class="text-blue-500 hover:bg-blue-50 p-2 rounded-full transition transform duration-300" id="icon-rhizopoda-detail">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                            <div id="rhizopoda-detail" class="accordion-content">
+                                <div class="pt-4 border-t border-gray-100 mt-4">
+                                    <p><strong>การเคลื่อนที่:</strong> ไซโทพลาสซึมแบ่งเป็น 2 ชั้น คือ <em>Ectoplasm</em> (ชั้นนอกข้น) และ <em>Endoplasm</em> (ชั้นในเหลว) เกิดการไหลไปมา (Cytoplasmic streaming) ดันเยื่อหุ้มเซลล์ออกไปเป็นเท้าเทียม</p>
+                                    <p><strong>การกินอาหาร:</strong> Phagocytosis (โอบล้อมจับกิน) เกิดเป็น Food Vacuole</p>
+                                    <div class="bg-blue-50 p-4 rounded-lg mt-2 text-sm">
+                                        <strong>💡 รู้หรือไม่?</strong>
+                                        <ul class="list-disc pl-5 mt-1">
+                                            <li><em>Entamoeba histolytica</em> ก่อโรคบิดมีตัว กินเม็ดเลือดแดงเป็นอาหาร</li>
+                                            <li><em>Foraminifera</em> มีเปลือกหินปูน สะสมเป็นแหล่งน้ำมัน</li>
+                                            <li><em>Radiolaria</em> มีเปลือกซิลิกา สวยงามเหมือนแก้วเจียระไน</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- P2 Zoomastigophora -->
+                        <div class="glass-panel p-6 rounded-2xl bio-card border-l-4 border-blue-500">
+                            <div class="flex justify-between items-start cursor-pointer" onclick="toggleAccordion('flagellata-detail')">
+                                <div>
+                                    <h3 class="!mt-0">2. Phylum Zoomastigophora (แฟลเจลเลต)</h3>
+                                    <p class="text-sm text-gray-600 mb-0"><strong>Keyword:</strong> หนวด (Flagellum) | <strong>Ex:</strong> Trypanosoma, Giardia</p>
+                                </div>
+                                <button class="text-blue-500 hover:bg-blue-50 p-2 rounded-full transition transform duration-300" id="icon-flagellata-detail">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                            <div id="flagellata-detail" class="accordion-content">
+                                <div class="pt-4 border-t border-gray-100 mt-4">
+                                    <p>ใช้ <strong>Flagella</strong> ยาวคล้ายแส้ในการโบกพัด ว่ายน้ำได้รวดเร็ว หลายชนิดเป็นปรสิตหรืออยู่ร่วมกัน (Symbiosis)</p>
+                                    <div class="bg-blue-50 p-4 rounded-lg mt-2 text-sm">
+                                        <strong>🧪 ตัวอย่างสำคัญ:</strong>
+                                        <ul class="list-disc pl-5 mt-1">
+                                            <li><em>Trichonympha:</em> อยู่ในลำไส้ปลวก สร้างเอนไซม์ Cellulase ช่วยย่อยไม้ (ถ้าไม่มีปลวกตาย!)</li>
+                                            <li><em>Trypanosoma brucei:</em> ก่อโรคเหงาหลับในแอฟริกา (African Sleeping Sickness) ทำลายระบบประสาท ทำให้หลับไม่ตื่น</li>
+                                            <li><em>Giardia lamblia:</em> ก่อโรค Giardiasis อุจจาระร่วงรุนแรง พบในน้ำดื่มที่ไม่สะอาด</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- P3 Ciliophora -->
+                        <div class="glass-panel p-6 rounded-2xl bio-card border-l-4 border-blue-500">
+                             <div class="flex justify-between items-start cursor-pointer" onclick="toggleAccordion('ciliata-detail')">
+                                <div>
+                                    <h3 class="!mt-0">3. Phylum Ciliophora (ซิลิเอต)</h3>
+                                    <p class="text-sm text-gray-600 mb-0"><strong>Keyword:</strong> ขนสั้น (Cilia) + 2 นิวเคลียส | <strong>Ex:</strong> Paramecium</p>
+                                </div>
+                                <button class="text-blue-500 hover:bg-blue-50 p-2 rounded-full transition transform duration-300" id="icon-ciliata-detail">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                            <div id="ciliata-detail" class="accordion-content">
+                                <div class="pt-4 border-t border-gray-100 mt-4">
+                                    <p>เป็นกลุ่มที่มีโครงสร้างซับซ้อนที่สุด มีขน <strong>Cilia</strong> รอบตัวใช้พัดโบกอาหารเข้า Oral groove</p>
+                                    <p><strong>ลักษณะพิเศษ:</strong> มีนิวเคลียส 2 ขนาด
+                                        <br>1. <strong>Macronucleus:</strong> ควบคุมเมตาบอลิซึม
+                                        <br>2. <strong>Micronucleus:</strong> ควบคุมการสืบพันธุ์แบบอาศัยเพศ (Conjugation)</p>
+                                    <div class="bg-blue-50 p-4 rounded-lg mt-2 text-sm">
+                                        <strong>🛡️ การป้องกันตัว:</strong>
+                                        มี <em>Trichocyst</em> เส้นใยเล็กๆ ใต้ผิวเซลล์ ยิงออกมาได้เมื่อถูกรบกวน
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- P4 Apicomplexa -->
+                        <div class="glass-panel p-6 rounded-2xl bio-card border-l-4 border-red-500">
+                            <div class="flex justify-between items-start cursor-pointer" onclick="toggleAccordion('api-detail')">
+                                <div>
+                                    <div class="flex items-center text-red-700 mb-1">
+                                        <i class="fas fa-skull-crossbones mr-2"></i>
+                                        <h3 class="!mt-0 !mb-0 !border-none !text-red-700">4. Phylum Apicomplexa</h3>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-0"><strong>Keyword:</strong> ปรสิต 100% | <strong>Ex:</strong> Plasmodium</p>
+                                </div>
+                                <button class="text-red-500 hover:bg-red-50 p-2 rounded-full transition transform duration-300" id="icon-api-detail">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                            <div id="api-detail" class="accordion-content">
+                                <div class="pt-4 border-t border-red-100 mt-4">
+                                    <p>ไม่มีอวัยวะเคลื่อนที่ (ใช้การไหลตามกระแสเลือด) ปลายเซลล์มีโครงสร้าง <strong>Apical Complex</strong> ใช้เจาะเข้าเซลล์โฮสต์</p>
+                                    <div class="bg-red-50 p-4 rounded-lg mt-2 text-sm border border-red-200">
+                                        <strong>🩸 วงจรชีวิตเชื้อมาลาเรีย (Plasmodium):</strong>
+                                        <ol class="list-decimal pl-5 mt-1 space-y-1">
+                                            <li>ยุงกัดคน ปล่อยระยะ <em>Sporozoite</em> เข้ากระแสเลือด</li>
+                                            <li>เชื้อเข้าตับ เปลี่ยนเป็น <em>Merozoite</em></li>
+                                            <li>เชื้อเข้าเม็ดเลือดแดง แบ่งตัวจนเซลล์แตก (เกิดอาการไข้จับสั่น)</li>
+                                            <li>บางตัวพัฒนาเป็น <em>Gametocyte</em> รอยุงมากัดเพื่อไปผสมพันธุ์ในยุงต่อไป</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            algae: `
+                <div class="max-w-5xl mx-auto animate-content">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-green-600 text-white p-3 rounded-lg mr-4 shadow-lg">
+                            <i class="fas fa-leaf text-2xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold text-gray-800">กลุ่ม Algae (สาหร่าย)</h2>
+                            <p class="text-green-600 font-medium">แบ่งเป็น 6 ไฟลัมหลัก ตามสีของรงควัตถุ</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6 prose-custom">
+                        <!-- Chlorophyta -->
+                        <div class="glass-panel p-6 rounded-2xl bio-card border-t-4 border-green-500">
+                            <div class="flex justify-between items-start">
+                                <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded mb-2 inline-block">1. Chlorophyta</span>
+                                <button onclick="toggleAccordion('chloro-detail')" class="text-green-600 hover:bg-green-50 rounded-full p-1"><i class="fas fa-plus-circle" id="icon-chloro-detail"></i></button>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mt-1 mb-2">สาหร่ายสีเขียว</h4>
+                            <p class="text-sm text-gray-600">บรรพบุรุษพืชบก | คลอโรฟิลล์ a, b</p>
+                            
+                            <div id="chloro-detail" class="accordion-content">
+                                <div class="mt-3 text-sm text-gray-700 bg-white/50 p-3 rounded border border-green-100">
+                                    <p><strong>ความสำคัญ:</strong> มีผนังเซลล์เป็นเซลลูโลสและสะสมอาหารแบบแป้งเหมือนพืช</p>
+                                    <ul class="list-disc pl-4 mt-1">
+                                        <li><em>Spirogyra:</em> คลอโรพลาสต์เป็นเกลียว</li>
+                                        <li><em>Chlorella:</em> โปรตีนสูง อาหารเสริม</li>
+                                        <li><em>Volvox:</em> อยู่เป็นโคโลนีทรงกลม</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phaeophyta -->
+                        <div class="glass-panel p-6 rounded-2xl bio-card border-t-4 border-yellow-700">
+                            <div class="flex justify-between items-start">
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded mb-2 inline-block">2. Phaeophyta</span>
+                                <button onclick="toggleAccordion('phaeo-detail')" class="text-yellow-700 hover:bg-yellow-50 rounded-full p-1"><i class="fas fa-plus-circle" id="icon-phaeo-detail"></i></button>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mt-1 mb-2">สาหร่ายสีน้ำตาล</h4>
+                            <p class="text-sm text-gray-600">ขนาดใหญ่สุด (Kelp) | รงควัตถุ Fucoxanthin</p>
+
+                            <div id="phaeo-detail" class="accordion-content">
+                                <div class="mt-3 text-sm text-gray-700 bg-white/50 p-3 rounded border border-yellow-100">
+                                    <p><strong>โครงสร้างคล้ายพืช:</strong> Blade (ใบ), Stipe (ก้าน), Holdfast (รากยึดเกาะ)</p>
+                                    <p><strong>ประโยชน์:</strong> สกัดสาร <strong>Algin</strong> ใช้ทำสารคงตัวในไอศกรีม, ยาสีฟัน, โลชั่น</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rhodophyta -->
+                        <div class="glass-panel p-6 rounded-2xl bio-card border-t-4 border-red-500">
+                             <div class="flex justify-between items-start">
+                                <span class="bg-red-100 text-red-800 text-xs font-bold px-2 py-1 rounded mb-2 inline-block">3. Rhodophyta</span>
+                                <button onclick="toggleAccordion('rhodo-detail')" class="text-red-600 hover:bg-red-50 rounded-full p-1"><i class="fas fa-plus-circle" id="icon-rhodo-detail"></i></button>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mt-1 mb-2">สาหร่ายสีแดง</h4>
+                            <p class="text-sm text-gray-600">น้ำลึก | รงควัตถุ Phycoerythrin</p>
+
+                             <div id="rhodo-detail" class="accordion-content">
+                                <div class="mt-3 text-sm text-gray-700 bg-white/50 p-3 rounded border border-red-100">
+                                    <p>ดูดกลืนแสงสีน้ำเงินเขียวได้ดี จึงอยู่น้ำลึกได้ ไม่มีระยะแฟลเจลลา</p>
+                                    <ul class="list-disc pl-4 mt-1">
+                                        <li><em>Porphyra (จีฉ่าย):</em> ทำซูชิ/แกงจืด</li>
+                                        <li><em>Gracilaria:</em> สกัด <strong>Agar (วุ้น)</strong> เพาะเลี้ยงเนื้อเยื่อ</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chrysophyta -->
+                        <div class="glass-panel p-6 rounded-2xl bio-card border-t-4 border-orange-400">
+                             <div class="flex justify-between items-start">
+                                <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2 py-1 rounded mb-2 inline-block">4. Chrysophyta</span>
+                                <button onclick="toggleAccordion('chryso-detail')" class="text-orange-600 hover:bg-orange-50 rounded-full p-1"><i class="fas fa-plus-circle" id="icon-chryso-detail"></i></button>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mt-1 mb-2">สาหร่ายสีทอง (Diatoms)</h4>
+                            <p class="text-sm text-gray-600">ผนังเซลล์ซิลิกา (แก้ว) | ผู้ผลิตหลัก</p>
+
+                             <div id="chryso-detail" class="accordion-content">
+                                <div class="mt-3 text-sm text-gray-700 bg-white/50 p-3 rounded border border-orange-100">
+                                    <p>ผนังเซลล์ประกบกัน 2 ฝา ลวดลายสวยงาม สะสมอาหารรูปน้ำมัน</p>
+                                    <p><strong>ประโยชน์:</strong> ซากไดอะตอม (Diatomaceous earth) ใช้ทำไส้กรอง, ยาขัดเงา, ยาฆ่าแมลง</p>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Pyrrophyta -->
+                        <div class="glass-panel p-6 rounded-2xl bio-card border-t-4 border-pink-500">
+                             <div class="flex justify-between items-start">
+                                <span class="bg-pink-100 text-pink-800 text-xs font-bold px-2 py-1 rounded mb-2 inline-block">5. Pyrrophyta</span>
+                                <button onclick="toggleAccordion('pyrro-detail')" class="text-pink-600 hover:bg-pink-50 rounded-full p-1"><i class="fas fa-plus-circle" id="icon-pyrro-detail"></i></button>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mt-1 mb-2">Dinoflagellates</h4>
+                            <p class="text-sm text-gray-600">ขี้ปลาวาฬ (Red Tide) | เรืองแสงได้</p>
+
+                             <div id="pyrro-detail" class="accordion-content">
+                                <div class="mt-3 text-sm text-gray-700 bg-white/50 p-3 rounded border border-pink-100">
+                                    <p>มี 2 แฟลเจลลา หมุนตัวเหมือนลูกข่าง</p>
+                                    <div class="bg-red-50 text-red-800 p-2 rounded mt-1 text-xs font-bold">
+                                        ⚠️ Red Tide: บลูมในน้ำ สร้างสารพิษ Saxitoxin ทำให้เป็นอัมพาตหากกินสัตว์น้ำที่ปนเปื้อน
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Euglenophyta -->
+                        <div class="glass-panel p-6 rounded-2xl bio-card border-t-4 border-teal-500">
+                             <div class="flex justify-between items-start">
+                                <span class="bg-teal-100 text-teal-800 text-xs font-bold px-2 py-1 rounded mb-2 inline-block">6. Euglenophyta</span>
+                                <button onclick="toggleAccordion('euglena-detail')" class="text-teal-600 hover:bg-teal-50 rounded-full p-1"><i class="fas fa-plus-circle" id="icon-euglena-detail"></i></button>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mt-1 mb-2">Euglenoids</h4>
+                            <p class="text-sm text-gray-600">Mixotroph (พืช+สัตว์) | Eyespot</p>
+
+                             <div id="euglena-detail" class="accordion-content">
+                                <div class="mt-3 text-sm text-gray-700 bg-white/50 p-3 rounded border border-teal-100">
+                                    <ul class="list-disc pl-4">
+                                        <li><strong>Eyespot:</strong> จุดสีแดงช่วยหาทิศทางแสง</li>
+                                        <li><strong>Contractile Vacuole:</strong> บีบตัวขับน้ำส่วนเกิน</li>
+                                        <li>ไม่มีผนังเซลล์ แต่มี Pellicle ยืดหยุ่น</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            fungilike: `
+                <div class="max-w-5xl mx-auto animate-content">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-yellow-500 text-white p-3 rounded-lg mr-4 shadow-lg">
+                            <i class="fas fa-cookie text-2xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold text-gray-800">กลุ่ม Fungi-like (คล้ายรา)</h2>
+                            <p class="text-yellow-600 font-medium">3 ไฟลัมหลัก: ผู้ย่อยสลายแห่งโลกจิ๋ว</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Myxomycota -->
+                        <div class="glass-panel p-6 md:p-8 rounded-2xl bio-card relative">
+                            <div class="flex justify-between items-start cursor-pointer" onclick="toggleAccordion('myxo-detail')">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center shrink-0">
+                                        <i class="fas fa-network-wired text-2xl text-yellow-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="!mt-0 !text-yellow-800 !border-none !mb-1 text-xl">1. Phylum Myxomycota</h3>
+                                        <p class="text-sm text-gray-600 mb-0">Plasmodial Slime Molds (ราเมือกชนิดพลาสโมเดียม)</p>
+                                    </div>
+                                </div>
+                                <button class="text-yellow-600 p-2"><i class="fas fa-chevron-down" id="icon-myxo-detail"></i></button>
+                            </div>
+                            
+                            <div id="myxo-detail" class="accordion-content prose-custom">
+                                <div class="pl-20 pt-4 border-t border-yellow-100 mt-4">
+                                    <p><strong>ระยะหากิน (Feeding Stage):</strong> เป็นก้อนไซโทพลาสซึมขนาดใหญ่ เรียกว่า <em>Plasmodium</em> (ระวังสับสนกับเชื้อมาลาเรียชื่อเดียวกัน) มีหลายนิวเคลียส (Coenocytic) ไหลไปมาแบบอะมีบา</p>
+                                    <p><strong>ระยะสืบพันธุ์:</strong> เมื่อแห้งแล้ง จะหยุดเคลื่อนที่และสร้างก้านชูสปอร์ (Fruiting body) หลากสีสัน</p>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Acrasiomycota (เพิ่มเข้ามาตามระบบ 12-13 ไฟลัม) -->
+                        <div class="glass-panel p-6 md:p-8 rounded-2xl bio-card relative">
+                            <div class="flex justify-between items-start cursor-pointer" onclick="toggleAccordion('acrasio-detail')">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center shrink-0">
+                                        <i class="fas fa-cubes text-2xl text-purple-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="!mt-0 !text-purple-800 !border-none !mb-1 text-xl">2. Phylum Acrasiomycota</h3>
+                                        <p class="text-sm text-gray-600 mb-0">Cellular Slime Molds (ราเมือกชนิดเซลลูลาร์)</p>
+                                    </div>
+                                </div>
+                                <button class="text-purple-600 p-2"><i class="fas fa-chevron-down" id="icon-acrasio-detail"></i></button>
+                            </div>
+                            
+                            <div id="acrasio-detail" class="accordion-content prose-custom">
+                                <div class="pl-20 pt-4 border-t border-purple-100 mt-4">
+                                    <p><strong>ความแตกต่าง:</strong> ปกติอยู่เป็นเซลล์เดี่ยวๆ (คล้ายอะมีบา) หากินอิสระ แต่เมื่อขาดอาหารจะมารวมกลุ่มกันเป็นก้อนคล้ายทาก (Slug) เพื่อสร้างสปอร์ แต่เซลล์แต่ละเซลล์ยังแยกเยื่อหุ้มกันอยู่ (ไม่รวมเป็นเนื้อเดียว)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Oomycota -->
+                        <div class="glass-panel p-6 md:p-8 rounded-2xl bio-card relative">
+                            <div class="flex justify-between items-start cursor-pointer" onclick="toggleAccordion('oomy-detail')">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
+                                        <i class="fas fa-water text-2xl text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="!mt-0 !text-blue-800 !border-none !mb-1 text-xl">3. Phylum Oomycota</h3>
+                                        <p class="text-sm text-gray-600 mb-0">Water Molds (ราน้ำ)</p>
+                                    </div>
+                                </div>
+                                <button class="text-blue-600 p-2"><i class="fas fa-chevron-down" id="icon-oomy-detail"></i></button>
+                            </div>
+                            
+                            <div id="oomy-detail" class="accordion-content prose-custom">
+                                <div class="pl-20 pt-4 border-t border-blue-100 mt-4">
+                                    <p><strong>ไม่ใช่ราจริง (True Fungi):</strong> เพราะผนังเซลล์เป็น <strong>Cellulose</strong> (ราจริงเป็น Chitin)</p>
+                                    <p><strong>การสืบพันธุ์:</strong> มีสปอร์ที่ว่ายน้ำได้ (Zoospores) มี 2 แฟลเจลลา</p>
+                                    <p class="text-sm bg-red-50 text-red-800 p-2 rounded inline-block border border-red-200"><strong>ผลกระทบ:</strong> ก่อโรคใบไหม้ในมันฝรั่ง (Potato Late Blight) และโรคราสนิมขาว</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            videos: `
+                <div class="max-w-6xl mx-auto animate-content">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">🎬 Video Micro-Lab</h2>
+                    <p class="text-gray-500 mb-8">ห้องปฏิบัติการเสมือนจริง: รวมคลิปการเคลื่อนที่ของโพรทิสต์ที่น่าสนใจ</p>
+                    
+                    <!-- Section 1: Protozoa (สัตว์) -->
+                    <div class="mb-10">
+                        <div class="flex items-center mb-4 border-b border-blue-200 pb-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded mr-2">Protozoa</span>
+                            <h3 class="text-xl font-bold text-gray-700 !m-0 !p-0 !border-none">การเคลื่อนที่ของโพรโทซัว</h3>
+                        </div>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Video: Paramecium (เหลืออันเดียวที่ดูได้ในกลุ่มนี้) -->
+                            <div class="glass-panel p-4 rounded-xl bio-card">
+                                <div class="video-container mb-3 bg-black rounded-lg shadow-inner">
+                                    <iframe src="https://www.youtube.com/embed/a4aZE5FQ284?rel=0" title="Paramecium" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                                <div class="flex justify-between items-center mt-2">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 text-sm">Paramecium (พารามีเซียม)</h4>
+                                        <p class="text-xs text-gray-500">การกินอาหารด้วยซิเลีย</p>
+                                    </div>
+                                    <a href="https://www.youtube.com/watch?v=a4aZE5FQ284" target="_blank" class="text-xs text-blue-500 hover:underline"><i class="fas fa-external-link-alt"></i> ดูบน YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Algae (สาหร่าย) -->
+                    <div class="mb-10">
+                        <div class="flex items-center mb-4 border-b border-green-200 pb-2">
+                            <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded mr-2">Algae</span>
+                            <h3 class="text-xl font-bold text-gray-700 !m-0 !p-0 !border-none">ความหลากหลายของสาหร่าย</h3>
+                        </div>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Video: Euglena -->
+                            <div class="glass-panel p-4 rounded-xl bio-card">
+                                <div class="video-container mb-3 bg-black rounded-lg shadow-inner">
+                                    <iframe src="https://www.youtube.com/embed/fI7CD8FF2ZA?rel=0" title="Euglena" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                                <div class="flex justify-between items-center mt-2">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 text-sm">Euglena (ยูกลีนา)</h4>
+                                        <p class="text-xs text-gray-500">การเคลื่อนที่และ Eyespot</p>
+                                    </div>
+                                    <a href="https://www.youtube.com/watch?v=fI7CD8FF2ZA" target="_blank" class="text-xs text-blue-500 hover:underline"><i class="fas fa-external-link-alt"></i> ดูบน YouTube</a>
+                                </div>
+                            </div>
+                             <!-- Video: Volvox -->
+                            <div class="glass-panel p-4 rounded-xl bio-card">
+                                <div class="video-container mb-3 bg-black rounded-lg shadow-inner">
+                                    <iframe src="https://www.youtube.com/embed/He9FSeGRi3A" title="Volvox" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                                <div class="flex justify-between items-center mt-2">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 text-sm">Volvox (วอลวอกซ์)</h4>
+                                        <p class="text-xs text-gray-500">โคโลนีทรงกลม</p>
+                                    </div>
+                                    <a href="https://www.youtube.com/watch?v=He9FSeGRi3A" target="_blank" class="text-xs text-blue-500 hover:underline"><i class="fas fa-external-link-alt"></i> ดูบน YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Fungi-like (คล้ายรา) -->
+                    <div class="mb-10">
+                        <div class="flex items-center mb-4 border-b border-yellow-200 pb-2">
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded mr-2">Fungi-like</span>
+                            <h3 class="text-xl font-bold text-gray-700 !m-0 !p-0 !border-none">พฤติกรรมของราเมือก</h3>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Video: Slime Mold -->
+                            <div class="glass-panel p-4 rounded-xl bio-card">
+                                <div class="video-container mb-3 bg-black rounded-lg shadow-inner">
+                                    <iframe src="https://www.youtube.com/embed/Kzjqq4C8e-E?rel=0" title="Slime Mold" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                                <div class="flex justify-between items-center mt-2">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 text-sm">Slime Mold (ราเมือก)</h4>
+                                        <p class="text-xs text-gray-500">การเจริญเติบโตแบบ Time-lapse</p>
+                                    </div>
+                                    <a href="https://www.youtube.com/watch?v=Kzjqq4C8e-E" target="_blank" class="text-xs text-blue-500 hover:underline"><i class="fas fa-external-link-alt"></i> ดูบน YouTube</a>
+                                </div>
+                            </div>
+                            <!-- Description Box -->
+                            <div class="glass-panel p-6 rounded-xl flex items-center justify-center bg-yellow-50/50">
+                                <div class="text-center">
+                                    <i class="fas fa-info-circle text-3xl text-yellow-500 mb-2"></i>
+                                    <p class="text-sm text-gray-600">
+                                        สิ่งมีชีวิตกลุ่มนี้มีพฤติกรรมที่น่าทึ่ง เช่น การหาอาหาร การหนีแสง หรือการรวมกลุ่มกันเพื่อความอยู่รอด
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            quiz: `
+                <div class="max-w-3xl mx-auto animate-content">
+                    <div class="glass-panel p-8 rounded-2xl text-center mb-8 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-400 to-blue-500"></div>
+                        <h2 class="text-2xl font-bold text-teal-800 mb-2">Biology Challenge</h2>
+                        <p class="text-gray-500">ทดสอบความเข้าใจ 13 ไฟลัม</p>
+                        <div class="mt-4 inline-block bg-teal-50 px-4 py-1 rounded-full text-sm font-bold text-teal-600">
+                            <i class="fas fa-question-circle mr-1"></i> 20 ข้อ
+                        </div>
+                    </div>
+                    
+                    <div id="quiz-container" class="space-y-6"></div>
+
+                    <button onclick="checkAnswers()" class="mt-8 w-full bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white font-bold py-4 px-4 rounded-xl shadow-lg shadow-teal-500/30 transition transform hover:-translate-y-1 relative overflow-hidden group">
+                        <span class="relative z-10">ส่งคำตอบ (Submit)</span>
+                        <div class="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition duration-500"></div>
+                    </button>
+
+                    <div id="quiz-result" class="hidden mt-8 p-6 glass-panel border border-teal-200 rounded-xl text-center animate-fadeSlideUp">
+                        <div class="w-16 h-16 mx-auto bg-teal-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-trophy text-2xl text-teal-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800" id="score-text"></h3>
+                        <p id="score-feedback" class="text-gray-600 mb-6"></p>
+                        <button onclick="loadContent('quiz')" class="bg-gray-100 text-gray-600 px-6 py-2 rounded-full hover:bg-gray-200 transition font-bold text-sm">ทำข้อสอบใหม่</button>
+                    </div>
+                </div>
+            `
+        };
+
+        const quizQuestions = [
+            {
+                q: "1. สิ่งมีชีวิตใดอยู่ใน Phylum Rhizopoda และก่อโรคบิดมีตัว?",
+                a: ["Amoeba proteus", "Entamoeba histolytica", "Trypanosoma", "Giardia lamblia"],
+                correct: 1,
+                explain: "<em>Entamoeba histolytica</em> เป็นอะมีบาที่เป็นปรสิตก่อโรคบิดมีตัว"
+            },
+            {
+                q: "2. Phylum Ciliophora (Paramecium) มีลักษณะเด่นเฉพาะตัวคือข้อใด?",
+                a: ["มีคลอโรพลาสต์", "มีหนวด (Flagella) ยาวๆ", "มี 2 นิวเคลียส", "สร้างสปอร์ได้"],
+                correct: 2,
+                explain: "มี <strong>Macronucleus</strong> (ควบคุมเซลล์) และ <strong>Micronucleus</strong> (สืบพันธุ์)"
+            },
+            {
+                q: "3. 'Red Tide' หรือปรากฏการณ์ขี้ปลาวาฬ เกิดจากสาหร่ายกลุ่มใด?",
+                a: ["Green Algae", "Brown Algae", "Dinoflagellates", "Red Algae"],
+                correct: 2,
+                explain: "Dinoflagellates บางชนิดเพิ่มจำนวนเร็วและสร้างสารพิษทำให้น้ำเปลี่ยนสี"
+            },
+            {
+                q: "4. สาหร่ายชนิดใดมีผนังเซลล์เป็น 'ซิลิกา' (Silica) นำมาทำไส้กรอง?",
+                a: ["Diatom (ไดอะตอม)", "Volvox", "Kelp", "Euglena"],
+                correct: 0,
+                explain: "ไดอะตอมมีผนังเซลล์เป็นซิลิกา แข็งแรงและลวดลายสวยงาม"
+            },
+            {
+                q: "5. เชื้อมาลาเรีย (Plasmodium) จัดอยู่ในไฟลัมใด?",
+                a: ["Rhizopoda", "Apicomplexa", "Zoomastigophora", "Ciliophora"],
+                correct: 1,
+                explain: "Apicomplexa (Sporozoa) เป็นปรสิตทั้งหมด ไม่มีอวัยวะเคลื่อนที่"
+            },
+            {
+                q: "6. Phylum Oomycota (ราน้ำ) แตกต่างจากรา (Fungi) ทั่วไปอย่างไร?",
+                a: ["สังเคราะห์แสงได้", "ผนังเซลล์เป็น Cellulose", "ไม่มีสปอร์", "เป็น Prokaryote"],
+                correct: 1,
+                explain: "ราน้ำมีผนังเซลล์เป็น <strong>Cellulose</strong> (พืช) แต่ราแท้มีผนังเป็น <strong>Chitin</strong>"
+            },
+            {
+                q: "7. สาหร่ายกลุ่มใดเป็นบรรพบุรุษของพืชบก?",
+                a: ["สาหร่ายสีเขียว", "สาหร่ายสีแดง", "สาหร่ายสีน้ำตาล", "ยูกลีนา"],
+                correct: 0,
+                explain: "สาหร่ายสีเขียวมีคลอโรฟิลล์ a และ b เหมือนพืช"
+            },
+            {
+                q: "8. ราเมือก (Slime Mold) ระยะหากินมีลักษณะอย่างไร?",
+                a: ["เส้นใย", "ก้อนไซโทพลาสซึม (Plasmodium)", "เซลล์รูปดาว", "สปอร์แข็ง"],
+                correct: 1,
+                explain: "ระยะหากินเป็นก้อนเมือกหลายนิวเคลียสไหลไปมาได้"
+            },
+            {
+                q: "9. ข้อใดไม่ใช่ลักษณะของสิ่งมีชีวิตในอาณาจักรโพรทิสตา?",
+                a: ["เป็น Eukaryote", "ส่วนใหญ่เป็นเซลล์เดียว", "ไม่มีเยื่อหุ้มนิวเคลียส", "มีออร์แกเนลล์"],
+                correct: 2,
+                explain: "โพรทิสต์ต้องมีเยื่อหุ้มนิวเคลียส (Eukaryote) หากไม่มีคือแบคทีเรีย (Monera)"
+            },
+            {
+                q: "10. Contractile Vacuole ในอะมีบาและพารามีเซียมทำหน้าที่อะไร?",
+                a: ["ย่อยอาหาร", "กำจัดน้ำส่วนเกิน", "รับความรู้สึก", "สืบพันธุ์"],
+                correct: 1,
+                explain: "ทำหน้าที่รักษาสมดุลน้ำ (Osmoregulation) เพื่อไม่ให้เซลล์แตก"
+            },
+            {
+                q: "11. การสืบพันธุ์แบบ Conjugation พบในสิ่งมีชีวิตกลุ่มใด?",
+                a: ["Amoeba", "Paramecium", "Euglena", "Slime Mold"],
+                correct: 1,
+                explain: "Paramecium สืบพันธุ์แบบอาศัยเพศโดยการจับคู่แลกเปลี่ยน Micronucleus (Conjugation)"
+            },
+            {
+                q: "12. โรคเหงาหลับ (African Sleeping Sickness) เกิดจากเชื้อใด?",
+                a: ["Plasmodium", "Trypanosoma", "Entamoeba", "Trichomonas"],
+                correct: 1,
+                explain: "เกิดจากเชื้อ <em>Trypanosoma</em> โดยมีแมลงวันเซตซีเป็นพาหะ"
+            },
+            {
+                q: "13. สาหร่ายชนิดใดนิยมนำมาทำซูชิ (จีฉ่าย)?",
+                a: ["Porphyra (สีแดง)", "Laminaria (สีน้ำตาล)", "Spirogyra (สีเขียว)", "Gelidium"],
+                correct: 0,
+                explain: "จีฉ่าย คือสาหร่ายสีแดงสกุล <em>Porphyra</em>"
+            },
+            {
+                q: "14. โครงสร้าง Eyespot ใน Euglena มีไว้เพื่ออะไร?",
+                a: ["สร้างอาหาร", "รับรู้แสง", "ย่อยอาหาร", "ป้องกันตัว"],
+                correct: 1,
+                explain: "ช่วยในการรับรู้ทิศทางแสง เพื่อเคลื่อนที่ไปสังเคราะห์แสง"
+            },
+            {
+                q: "15. Trichonympha ในลำไส้ปลวกมีความสัมพันธ์แบบใด?",
+                a: ["ภาวะปรสิต", "ภาวะพึ่งพาอาศัยกัน (Mutualism)", "ภาวะอิงอาศัย", "ภาวะล่าเหยื่อ"],
+                correct: 1,
+                explain: "ต่างฝ่ายต่างได้ประโยชน์ (ปลวกได้เอนไซม์ย่อยไม้, โปรโตซัวได้ที่อยู่และอาหาร)"
+            },
+            {
+                q: "16. ข้อใดคือลักษณะที่ทำให้ราน้ำ (Oomycota) ต่างจากราทั่วไป?",
+                a: ["สร้างสปอร์ได้", "เป็นผู้ย่อยสลาย", "ผนังเซลล์เป็น Cellulose", "ไม่มีนิวเคลียส"],
+                correct: 2,
+                explain: "ราแท้จริงมีผนังเซลล์เป็น Chitin แต่ราน้ำเป็น Cellulose"
+            },
+            {
+                q: "17. สาร Algin ที่ใช้ทำไอศกรีม สกัดมาจากสาหร่ายกลุ่มใด?",
+                a: ["สีเขียว", "สีแดง", "สีน้ำตาล", "สีทอง"],
+                correct: 2,
+                explain: "Algin สกัดจากผนังเซลล์ของสาหร่ายสีน้ำตาล (Brown Algae)"
+            },
+            {
+                q: "18. สิ่งมีชีวิตใดเคลื่อนที่โดยใช้ Flagella?",
+                a: ["Amoeba", "Paramecium", "Euglena", "Plasmodium"],
+                correct: 2,
+                explain: "Euglena เคลื่อนที่โดยใช้หนวดยาว (Flagellum)"
+            },
+            {
+                q: "19. ระยะ Plasmodium ของราเมือก มีลักษณะเด่นอย่างไร?",
+                a: ["เป็นเซลล์เดียวขนาดเล็ก", "เป็นก้อนไซโทพลาสซึมหลายนิวเคลียส", "มีผนังเซลล์หนา", "สร้างอาหารเองได้"],
+                correct: 1,
+                explain: "ระยะหากินของราเมือกเป็นก้อนเมือกขนาดใหญ่ที่มีหลายนิวเคลียส (Coenocytic)"
+            },
+            {
+                q: "20. สาหร่ายกลุ่มใดที่เซลล์สืบพันธุ์ไม่มีแฟลเจลลาเลยตลอดวงจรชีวิต?",
+                a: ["สาหร่ายสีเขียว", "สาหร่ายสีแดง", "สาหร่ายสีน้ำตาล", "ไดอะตอม"],
+                correct: 1,
+                explain: "สาหร่ายสีแดง (Rhodophyta) ไม่มีระยะที่เคลื่อนที่ด้วยแฟลเจลลา"
+            }
+        ];
+
+        function loadContent(sectionId) {
+            const mainContent = document.getElementById('main-content');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (sectionId === 'quiz') {
+                mainContent.innerHTML = contentData[sectionId];
+                renderQuiz();
+            } else {
+                mainContent.innerHTML = contentData[sectionId] || contentData['intro'];
+            }
+            
+            // Highlight Nav
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('active-nav');
+                el.classList.remove('bg-teal-50');
+            });
+            const activeLink = document.getElementById(`nav-${sectionId}`);
+            if(activeLink) activeLink.classList.add('active-nav');
+
+            mainContent.scrollTop = 0;
+
+            // Mobile menu close
+            if(window.innerWidth < 768) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        }
+
+        // Accordion Function
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('rotate-180');
+                if(icon.classList.contains('fa-plus-circle')) {
+                    icon.classList.remove('fa-minus-circle');
+                    icon.classList.add('fa-plus-circle');
+                }
+            } else {
+                content.classList.add('expanded');
+                icon.classList.add('rotate-180');
+                if(icon.classList.contains('fa-plus-circle')) {
+                    icon.classList.remove('fa-plus-circle');
+                    icon.classList.add('fa-minus-circle');
+                }
+            }
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            let html = '';
+            quizQuestions.forEach((item, index) => {
+                html += `
+                    <div class="glass-panel p-6 rounded-2xl bio-card border border-white/50">
+                        <div class="flex items-start mb-4">
+                            <div class="bg-teal-100 text-teal-800 font-bold rounded-lg w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">${index + 1}</div>
+                            <p class="font-bold text-lg text-gray-800 pt-1">${item.q}</p>
+                        </div>
+                        <div class="space-y-3 pl-11">
+                            ${item.a.map((ans, i) => `
+                                <label class="flex items-center space-x-3 cursor-pointer p-3 bg-white/50 border border-transparent rounded-lg hover:bg-teal-50 hover:border-teal-200 transition group">
+                                    <input type="radio" name="q${index}" value="${i}" class="form-radio text-teal-600 h-5 w-5 focus:ring-teal-500 bg-gray-100 border-gray-300">
+                                    <span class="text-gray-700 group-hover:text-teal-900">${ans}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                        <div id="explain-${index}" class="hidden mt-4 ml-11 p-4 bg-blue-50/80 text-blue-900 text-sm rounded-lg border border-blue-100 flex items-start animate-fadeSlideUp">
+                            <i class="fas fa-lightbulb text-yellow-500 mr-3 mt-1 text-lg"></i>
+                            <div><strong>เฉลย:</strong> ${item.explain}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            quizQuestions.forEach((item, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                const explainDiv = document.getElementById(`explain-${index}`);
+                explainDiv.classList.remove('hidden');
+
+                if (selected) {
+                    if (parseInt(selected.value) === item.correct) {
+                        score++;
+                        selected.parentElement.classList.add('bg-green-100', 'border-green-400');
+                        selected.parentElement.querySelector('span').classList.add('font-bold', 'text-green-800');
+                    } else {
+                        selected.parentElement.classList.add('bg-red-100', 'border-red-400');
+                    }
+                }
+            });
+
+            const resultDiv = document.getElementById('quiz-result');
+            const scoreText = document.getElementById('score-text');
+            const feedbackText = document.getElementById('score-feedback');
+            
+            resultDiv.classList.remove('hidden');
+            scoreText.textContent = `คะแนนของคุณ: ${score} / ${quizQuestions.length}`;
+            
+            if (score >= 16) {
+                feedbackText.innerHTML = "สุดยอด! คุณคือผู้เชี่ยวชาญด้านโพรทิสต์ 🦠✨ (Expert Level)";
+            } else if (score >= 10) {
+                feedbackText.innerHTML = "ทำได้ดี! ทบทวนอีกนิดเก่งแน่นอน 👍 (Intermediate Level)";
+            } else {
+                feedbackText.innerHTML = "พยายามอีกนิด! ลองอ่านบทเรียนแล้วมาเล่นใหม่นะ 📚 (Novice Level)";
+            }
+            
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Mobile Menu
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            loadContent('intro');
+        });
+
+    </script>
+</body>
+</html>
